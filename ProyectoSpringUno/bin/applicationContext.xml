@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+">
+
+<!-- Inyeccion propiedades Cargue de propiedades desde archivo externo -->
+<!-- cambiamos solo datos desde archivos externos si cambian -->
+<context:property-placeholder location="classpath:datosEmpresa.propiedades"/>
+
+<!-- 3. creación dependencia -->
+<bean id="miInforme" class="co.pildo.IoC.Informe"></bean>
+
+<!-- Bean para DI por Constructor
+Generador de objetos, creamos un contenedor spring, 
+que proporciona beans(objetos) de tipo directorempleado 
+Solo con cambia el tipo de clase genera un resultado diferente en la instancia realizada
+-->
+<bean id="miEmpleado" class="co.pildo.IoC.JefeEmpleado"> <!-- Solo debemos cambiar la clase -->
+	<!-- 3. Configurar la depedencia en XML -->
+	<constructor-arg ref="miInforme"></constructor-arg>
+	<!-- Inyeccion de campos, name nombre del setter, value valor del dato en comun -->
+	<property name="email" value="${email}"></property>
+	<property name="nombreEmpresa" value="${nombreEmpresa}"></property>
+</bean>
+
+<!-- Bean para DI por Setter -->
+<bean id="miSecretarioEmpleado" class="co.pildo.IoC.SecretarioEmpleado"> <!-- Solo debemos cambiar la clase -->
+	<!-- name = nombre del Setter (setInformeNuevo) sin palabra set y primera minuscula -->
+	<!-- la ref es el bean para el informe -->
+	<property name="informeNuevo" ref="miInforme"></property>
+	<!-- Inyeccion de campos, name nombre del setter, value valor del dato en comun -->
+	<property name="email" value="secretaria@net.co"></property>
+	<property name="nombreEmpresa" value="punto net"></property>
+</bean>
+
+</beans>
